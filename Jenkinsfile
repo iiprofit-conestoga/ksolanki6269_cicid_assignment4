@@ -27,8 +27,12 @@ pipeline {
             steps {
                 script {
                     echo 'Setting up Python environment...'
-                    sh 'python -m venv venv'
-                    sh '. venv/bin/activate && pip install -r requirements.txt'
+                    sh '''
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        python3 -m pip install --upgrade pip
+                        pip3 install -r requirements.txt
+                    '''
                 }
             }
         }
@@ -37,7 +41,10 @@ pipeline {
             steps {
                 script {
                     echo 'Running tests...'
-                    sh '. venv/bin/activate && python -m pytest test_function.py -v'
+                    sh '''
+                        . venv/bin/activate
+                        python3 -m pytest test_function.py -v
+                    '''
                 }
             }
         }
