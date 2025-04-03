@@ -2,15 +2,27 @@ pipeline {
     agent any
     
     environment {
+        // These credentials should be configured in Jenkins Credentials Manager
         AZURE_SUBSCRIPTION_ID = credentials('AZURE_SUBSCRIPTION_ID')
         AZURE_TENANT_ID = credentials('AZURE_TENANT_ID')
         AZURE_CLIENT_ID = credentials('AZURE_CLIENT_ID')
         AZURE_CLIENT_SECRET = credentials('AZURE_CLIENT_SECRET')
-        RESOURCE_GROUP = 'your-resource-group'
-        FUNCTION_APP_NAME = 'your-function-app-name'
+        // Update these with your actual Azure resource group and function app name
+        RESOURCE_GROUP = 'ksolanki6269-rg'  // Replace with your resource group name
+        FUNCTION_APP_NAME = 'ksolanki6269-function'  // Replace with your function app name
+    }
+    
+    triggers {
+        githubPush()
     }
     
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
         stage('Build') {
             steps {
                 script {
@@ -49,6 +61,12 @@ pipeline {
     post {
         always {
             cleanWs()
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 } 
