@@ -56,4 +56,4 @@ The project includes a Jenkins pipeline with three stages:
 The project includes three test cases:
 1. Verifies the response contains "Hello, World!"
 2. Checks if the status code is 200
-3. Validates the response type is correct 
+3. Validates the response type is correct
