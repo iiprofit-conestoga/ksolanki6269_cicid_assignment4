@@ -24,5 +24,13 @@
         "enableWorkerIndexing": true,
         "languageWorkers:python:workerDirectory": ".",
         "languageWorkers:python:arguments": "--enable-worker-indexing"
+    },
+    "cors": {
+        "allowedOrigins": [
+            "https://portal.azure.com",
+            "https://ksolanki6269-function.azurewebsites.net",
+            "http://localhost:7071"
+        ],
+        "supportCredentials": true
     }
 } 
