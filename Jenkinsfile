@@ -64,6 +64,38 @@ pipeline {
                         # Create deployment package
                         echo "Creating deployment package..."
                         
+                        # Create host.json if it doesn't exist
+                        if [ ! -f host.json ]; then
+                            echo 'Creating host.json...'
+                            echo '{
+    "version": "2.0",
+    "logging": {
+        "applicationInsights": {
+            "samplingSettings": {
+                "isEnabled": true,
+                "excludedTypes": "Request"
+            }
+        }
+    },
+    "extensionBundle": {
+        "id": "Microsoft.Azure.Functions.ExtensionBundle",
+        "version": "[3.*, 4.0.0)"
+    }
+}' > host.json
+                        fi
+                        
+                        # Create local.settings.json if it doesn't exist
+                        if [ ! -f local.settings.json ]; then
+                            echo 'Creating local.settings.json...'
+                            echo '{
+    "IsEncrypted": false,
+    "Values": {
+        "FUNCTIONS_WORKER_RUNTIME": "python",
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true"
+    }
+}' > local.settings.json
+                        fi
+                        
                         # Create a temporary directory for deployment
                         mkdir -p deploy
                         

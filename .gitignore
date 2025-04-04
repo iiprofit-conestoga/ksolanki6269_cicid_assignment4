@@ -20,8 +20,6 @@ bin/
 obj/
 .funcignore
 .function.json
-host.json
-local.settings.json
 
 # Build and deploy
 function.zip
