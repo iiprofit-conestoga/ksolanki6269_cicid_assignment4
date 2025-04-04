@@ -55,9 +55,21 @@ pipeline {
                     echo 'Deploying to Azure Functions...'
                     sh '''
                         . venv/bin/activate
+                        
+                        # Check if Azure CLI is installed
+                        if ! command -v az &> /dev/null; then
+                            echo "Azure CLI is not installed. Installing..."
+                            curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+                        fi
+                        
+                        # Login to Azure
                         az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
                         az account set --subscription $AZURE_SUBSCRIPTION_ID
+                        
+                        # Create deployment package
                         zip -r function.zip . -x "venv/*" "tests/*" "*.pyc" "__pycache__/*"
+                        
+                        # Deploy to Azure Functions
                         az functionapp deployment source config-zip --resource-group $RESOURCE_GROUP --name $FUNCTION_APP_NAME --src function.zip
                     '''
                 }
