@@ -63,7 +63,7 @@ pipeline {
                     sh '''
                         # Create deployment package
                         echo "Creating deployment package..."
-                        zip -r function.zip . -x "venv/*" "tests/*" "*.pyc" "__pycache__/*"
+                        zip -r function.zip . -x "venv/*" "tests/*" "*.pyc" "__pycache__/*" ".git/*" ".pytest_cache/*"
                         
                         # Login to Azure
                         echo "Logging into Azure..."
@@ -72,7 +72,7 @@ pipeline {
                         
                         # Deploy using Azure Functions Core Tools
                         echo "Deploying to Azure Functions..."
-                        func azure functionapp publish $FUNCTION_APP_NAME --python --build remote --build-native-deps
+                        func azure functionapp publish $FUNCTION_APP_NAME --python --build remote --build-native-deps --nozip
                     '''
                 }
             }
