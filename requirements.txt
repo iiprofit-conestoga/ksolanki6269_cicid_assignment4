@@ -1,4 +1,4 @@
-azure-functions==1.17.1
+azure-functions==1.23.0b3
 pytest==7.4.3
 pytest-asyncio==0.21.1
 aiohttp==3.9.1
