@@ -8,8 +8,8 @@ pipeline {
         AZURE_CLIENT_ID = credentials('AZURE_CLIENT_ID')
         AZURE_CLIENT_SECRET = credentials('AZURE_CLIENT_SECRET')
         // Update these with your actual Azure resource group and function app name
-        RESOURCE_GROUP = 'ksolanki6269-rg'  // Replace with your resource group name
-        FUNCTION_APP_NAME = 'ksolanki6269-function'  // Replace with your function app name
+        RESOURCE_GROUP = 'ksolanki6269-rg'
+        FUNCTION_APP_NAME = 'ksolanki6269-function'
     }
     
     triggers {
@@ -63,7 +63,20 @@ pipeline {
                     sh '''
                         # Create deployment package
                         echo "Creating deployment package..."
-                        zip -r function.zip . -x "venv/*" "tests/*" "*.pyc" "__pycache__/*" ".git/*" ".pytest_cache/*"
+                        
+                        # Create a temporary directory for deployment
+                        mkdir -p deploy
+                        
+                        # Copy necessary files to the deployment directory
+                        cp function_app.py deploy/
+                        cp requirements.txt deploy/
+                        cp host.json deploy/
+                        cp local.settings.json deploy/
+                        
+                        # Create the deployment package
+                        cd deploy
+                        zip -r ../function.zip .
+                        cd ..
                         
                         # Login to Azure
                         echo "Logging into Azure..."
@@ -72,7 +85,12 @@ pipeline {
                         
                         # Deploy using Azure Functions Core Tools
                         echo "Deploying to Azure Functions..."
-                        func azure functionapp publish $FUNCTION_APP_NAME --python --build remote --build-native-deps --nozip
+                        cd deploy
+                        func azure functionapp publish $FUNCTION_APP_NAME --python --build remote --build-native-deps
+                        cd ..
+                        
+                        # Clean up
+                        rm -rf deploy
                     '''
                 }
             }
