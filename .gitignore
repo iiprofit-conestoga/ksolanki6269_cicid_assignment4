@@ -32,10 +32,20 @@ function.zip
 .DS_Store
 Thumbs.db
 
+# Documentation files
+document.md
+document_local.md
+document_ngrok.md
+document_local_new.md
+document_ngrok_new.md
+*.md
+!README.md
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
 
 # C extensions
 *.so
