@@ -54,15 +54,12 @@ pipeline {
                 script {
                     echo 'Deploying to Azure Functions...'
                     sh '''
-                        # Install Azure Functions Core Tools
-                        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-                        sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
-                        sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-$(lsb_release -rs)-prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/dotnetdev.list'
-                        sudo apt-get update
-                        sudo apt-get install -y azure-functions-core-tools@4
-                        
                         # Create deployment package
                         zip -r function.zip . -x "venv/*" "tests/*" "*.pyc" "__pycache__/*"
+                        
+                        # Login to Azure
+                        az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+                        az account set --subscription $AZURE_SUBSCRIPTION_ID
                         
                         # Deploy using Azure Functions Core Tools
                         func azure functionapp publish $FUNCTION_APP_NAME --python --build remote --build-native-deps
