@@ -33,14 +33,13 @@ function.zip
 Thumbs.db
 
 # Documentation files
-document.md
 document_local.md
 document_ngrok.md
 document_local_new.md
 document_ngrok_new.md
 Document_v1_local.md
 Document_v1.ngrok.md
-Documents.md
+
 *.md
 !README.md
 
