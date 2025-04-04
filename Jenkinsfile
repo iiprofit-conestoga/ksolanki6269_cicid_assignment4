@@ -56,11 +56,11 @@ pipeline {
                     sh '''
                         . venv/bin/activate
                         
-                        # Check if Azure CLI is installed
-                        if ! command -v az &> /dev/null; then
-                            echo "Azure CLI is not installed. Installing..."
-                            curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-                        fi
+                        # Install Azure CLI using pip (no sudo required)
+                        python3 -m pip install --user azure-cli
+                        
+                        # Add the local bin directory to PATH
+                        export PATH=$PATH:$HOME/.local/bin
                         
                         # Login to Azure
                         az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
